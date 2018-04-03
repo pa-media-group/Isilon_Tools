@@ -48,6 +48,10 @@ Isilon_Tools
       -n, --name		Cluster name or IP of the Isilon system.
 
 ### Running Isilon Tools
+
+As an alternative to passing a password on the command-line with --password (which can be unsafe), you can specify the password in the
+environment variable ISI_TOOLS_PASSWORD.
+
 * The default path for the backup file is “./archive”, in case the path is not exist the backup file will be saved on the current directory.
 
 * The name of the backup file is build from the type and date&time which the file was created. For example: quotas_29_12_18_11.bck is back file of quotas which was taken on December 29 in 6:11.
@@ -91,3 +95,4 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 ### Support
 Please file bugs and issues at the Github issues page. For more general discussions you can contact the EMC Code team at Google Groups. The code and documentation are released with no warranties or SLAs and are intended to be supported through a community driven process.
+food

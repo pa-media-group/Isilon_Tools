@@ -95,4 +95,3 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 ### Support
 Please file bugs and issues at the Github issues page. For more general discussions you can contact the EMC Code team at Google Groups. The code and documentation are released with no warranties or SLAs and are intended to be supported through a community driven process.
-food

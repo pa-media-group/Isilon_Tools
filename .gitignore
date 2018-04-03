@@ -1,4 +1,4 @@
 *.pyc
-exports.log
+*.log
 *.bck
 archive

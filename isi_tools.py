@@ -24,6 +24,7 @@ import logging
 import time
 import argparse
 import json
+import os
 from isilon.exceptions import Syntax
 
 tm = time.localtime(time.time())
@@ -111,9 +112,14 @@ def main():
                         action='store', required=True, choices=('shares', 'exports', 'quotas', 'all'), metavar='TYPE')
     group1.add_argument("-f", "--file", help="Path to the backup file for restore operation.", action='store', required=False)
     group1.add_argument("-u", "--username", help="Username for login.", action='store', required=True, dest='user')
-    group1.add_argument("-pw", "--password", help="Password to login.", required=True, dest='password')
+    group1.add_argument("-pw", "--password", help="Password to login.", dest='password')
     group1.add_argument("-n", "--name", help="Cluster name to connect.", action='store', required=True, dest='clustername')
     args = parser.parse_args()
+    
+    password = args.password
+    
+    if "ISI_TOOLS_PASSWORD" in os.environ:
+        password = os.environ["ISI_TOOLS_PASSWORD"]
 
     LOG_FILENAME = args.type + '.log'
 
@@ -125,6 +131,9 @@ def main():
     handler.setFormatter(formatter)
     my_logger.addHandler(handler)
 
+    if not password:
+        my_logger.error("--password (or ISI_TOOLS_PASSWORD environment variable) is required.")
+        raise Syntax("--password (or ISI_TOOLS_PASSWORD environment variable) is required.")
     if args.action[0] == 'restore' and args.file == None:
         my_logger.error("--file is required in restore operation.")
         raise Syntax("--file is required in Restore operation.")
@@ -136,7 +145,7 @@ def main():
     else:
         my_logger.setLevel('INFO')
     my_logger.info('------------------------------------- Isilon Tools -------------------------------------')
-    api = isilon.API(args.clustername, args.user, args.password)
+    api = isilon.API(args.clustername, args.user, password)
     if args.action[0] == 'backup':
         backup(api, args)
     elif args.action[0] == 'restore':

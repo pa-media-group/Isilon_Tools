@@ -29,7 +29,7 @@ class Platform(object):
         self.log.addHandler(logging.NullHandler())
         self.session = session
         self.api_call = session.api_call
-        self.platform_url = '/platform/1'
+        self.platform_url = '/platform/3'
 
     def get_object(self, type):
         objects = ""
@@ -104,7 +104,6 @@ class Platform(object):
             del obj['time_delta']
             del obj['unresolved_clients']
             del obj['conflicting_paths']
-            del obj['map_all']
             try:
                 zid = obj['zid']
                 del obj['zid']

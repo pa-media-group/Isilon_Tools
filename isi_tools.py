@@ -27,7 +27,7 @@ import json
 import os
 from isilon.exceptions import Syntax
 
-formatted_time = time.strftime('%Y-%m-%d_%H:%M')
+formatted_time = time.strftime('%Y-%m-%d_%H-%M')
 # Set up a specific logger with our desired output level
 my_logger = logging.getLogger('logger_agent')
 

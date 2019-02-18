@@ -27,7 +27,7 @@ import json
 import os
 from isilon.exceptions import Syntax
 
-tm = time.localtime(time.time())
+formatted_time = time.strftime('%Y-%m-%d_%H:%M')
 # Set up a specific logger with our desired output level
 my_logger = logging.getLogger('logger_agent')
 
@@ -35,31 +35,18 @@ def backup(api, args):
     my_logger.info("Backup operation started on Isilon...")
     if args.type == "all":
         types = ['shares', 'exports', 'quotas']
-        for item in types:
-            try:
-                bckfile = open(
-                        './archive/' + item + '_' + str(tm[2]) + '_' + str(tm[1]) + '_' + str(tm[3]) + '_' + str(
-                        tm[4]) + '.bck', 'w')
-            except:
-                my_logger.error("Path not found, opening the backup file in current directory")
-                bckfile = open(
-                    './' + item + '_' + str(tm[2]) + '_' + str(tm[1]) + '_' + str(tm[3]) + '_' + str(tm[4]) + '.bck', 'w')
-            my_logger.info("Opening backup file " + bckfile.name + ".")
-            objects = api.platform.get_object(item)
-            bckfile.write(objects[0])
-            my_logger.info("Total objects: " + str(objects[1]))
-            my_logger.info("Closing backup file " + bckfile.name)
     else:
+        types = [args.type]
+    for item in types:
         try:
             bckfile = open(
-                    './archive/' + args.type + '_' + str(tm[2]) + '_' + str(tm[1]) + '_' + str(tm[3]) + '_' + str(
-                    tm[4]) + '.bck', 'w')
+                    './archive/' + item + '_' + args.clustername + '_' + formatted_time + '.bck', 'w')
         except:
             my_logger.error("Path not found, opening the backup file in current directory")
             bckfile = open(
-                './' + args.type + '_' + str(tm[2]) + '_' + str(tm[1]) + '_' + str(tm[3]) + '_' + str(tm[4]) + '.bck', 'w')
+                './' + item + '_' + args.clustername + '_' + formatted_time + '.bck', 'w')
         my_logger.info("Opening backup file " + bckfile.name + ".")
-        objects = api.platform.get_object(args.type)
+        objects = api.platform.get_object(item)
         bckfile.write(objects[0])
         my_logger.info("Total objects: " + str(objects[1]))
         my_logger.info("Closing backup file " + bckfile.name)
@@ -90,13 +77,11 @@ def delete(api, args):
     my_logger.info("Delete operation started on Isilon...")
     if args.type == "all":
         types = ['shares', 'exports', 'quotas']
-        for item in types:
-            my_logger.info("Start deleting all "+item)
-            objects = api.platform.delete_object(item)
-            my_logger.info("Delete operation on Isilon was finished!")
     else:
-        my_logger.info("Start deleting all "+args.type)
-        objects = api.platform.delete_object(args.type)
+        types = [args.type]
+    for item in types:
+        my_logger.info("Start deleting all "+item)
+        objects = api.platform.delete_object(item)
         my_logger.info("Delete operation on Isilon was finished!")
     return
 

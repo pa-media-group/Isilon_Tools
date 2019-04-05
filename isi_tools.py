@@ -34,7 +34,7 @@ my_logger = logging.getLogger('logger_agent')
 def backup(api, args):
     my_logger.info("Backup operation started on Isilon...")
     if args.type == "all":
-        types = ['shares', 'exports', 'quotas']
+        types = ['shares', 'exports', 'quotas', 'schedules']
     else:
         types = [args.type]
     for item in types:
@@ -65,6 +65,7 @@ def restore(api, args):
     for line in bckfile:
         line = line.replace('\n', '')
         obj = json.loads(line)
+        #my_logger.info("Object ID " + obj.id + "\n")
         api.platform.set_object(obj, args.type)
         count += 1
     my_logger.info("Total objects: " + str(count))
@@ -76,7 +77,7 @@ def restore(api, args):
 def delete(api, args):
     my_logger.info("Delete operation started on Isilon...")
     if args.type == "all":
-        types = ['shares', 'exports', 'quotas']
+        types = ['shares', 'exports', 'quotas', 'schedules']
     else:
         types = [args.type]
     for item in types:
@@ -93,8 +94,8 @@ def main():
 
     parser.add_argument("-v", "--verbose", help="detailed logging.", action='store_true', required=False )
     group1 = parser.add_argument_group("Required")
-    group1.add_argument("-t", "--type", help="specifies the type of the object [shares, export, quotas, all].",
-                        action='store', required=True, choices=('shares', 'exports', 'quotas', 'all'), metavar='TYPE')
+    group1.add_argument("-t", "--type", help="specifies the type of the object [shares, export, quotas, schedules, all].",
+                        action='store', required=True, choices=('shares', 'exports', 'quotas', 'schedules', 'all'), metavar='TYPE')
     group1.add_argument("-f", "--file", help="Path to the backup file for restore operation.", action='store', required=False)
     group1.add_argument("-u", "--username", help="Username for login.", action='store', required=True, dest='user')
     group1.add_argument("-pw", "--password", help="Password to login.", dest='password')

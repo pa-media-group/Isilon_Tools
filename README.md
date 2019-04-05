@@ -1,14 +1,14 @@
 Isilon_Tools
 =============
-  The script utilizing Isilon Platform API interface to back up shares, exports and quotas for use cases such as: DRP and backup   necessaryconfiguration for DR. 
+  The script utilizing Isilon Platform API interface to back up shares, exports, snapshot schedules and quotas for use cases such as: DRP and backup   necessaryconfiguration for DR. 
 <hr>
 
 ### Summary
   EMC Isilon scale-out storage solutions are designed for the enterprise that want to manage their data, not their storage. Our storage systems are powerful yet simple to install, manage, and scale to virtually any size. And, unlike traditional enterprise storage, Isilon solutions stay simple no matter how much storage capacity is added, how much performance is required, or how business needs change in the future. We’re challenging enterprises to think differently about their storage, because when they do, they’ll recognize there’s a better, simpler way – with Isilon.
-  The script utilizing Isilon Platform API interface to back up shares, exports and quotas for use cases such as: DRP and backup necessary configuration for DR.
+  The script utilizing Isilon Platform API interface to back up shares, exports, schedules and quotas for use cases such as: DRP and backup necessary configuration for DR.
 
 ### Install
-  Create and restore shares, exports and quotas on an Isilon system utilizing the REST API interface. 
+  Create and restore shares, exports, snapshot schedules  and quotas on an Isilon system utilizing the REST API interface. 
   This script was written against Python 2.7.8 and will require the requests (2.4.3 or newer) package to be installed using:<br>
   
       pip install requests
@@ -26,7 +26,7 @@ Isilon_Tools
           backup | delete | restore --file FILE
                         backup/restore/delete the object is selected on the –type flag
       Required:
-          -t TYPE, --type TYPE  specifies the type of the object [shares, export, quotas, all].
+          -t TYPE, --type TYPE  specifies the type of the object [shares, export, quotas, schedules, all].
           -f FILE, --file FILE  Path to the backup file for restore operaiotn.
           -u USER, --username USER
                         Username for login.
@@ -42,7 +42,8 @@ Isilon_Tools
 ### Options
       -h --help               Show this help screen
       -v, --verbose          	For detailed log and messages.
-      -t, --type		Path to the backup file for restore operation. (required ONLY for restore operation)
+      -f, --file		Path to the backup file for restore operation. (required ONLY for restore operation)
+      -t, --type                One of shares, exports, quotas, schedules, all 
       -u, --user		Username for Isilon API.
       -pw, --password			Password for Isilon API.
       -n, --name		Cluster name or IP of the Isilon system.

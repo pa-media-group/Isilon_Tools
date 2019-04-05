@@ -65,6 +65,7 @@ def restore(api, args):
     for line in bckfile:
         line = line.replace('\n', '')
         obj = json.loads(line)
+        #my_logger.info("Object ID " + obj.id + "\n")
         api.platform.set_object(obj, args.type)
         count += 1
     my_logger.info("Total objects: " + str(count))

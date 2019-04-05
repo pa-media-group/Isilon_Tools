@@ -140,7 +140,7 @@ class Platform(object):
             del obj['next_snapshot']
             del obj['id']
             params = json.dumps(obj)
-            r - self.api_call("POST", self.platform_url + "/snapshot/schedule/",data=params)
+            r = self.api_call("POST", self.platform_url + "/snapshot/schedules/",data=params)
         return
 
     def delete_object(self, type):

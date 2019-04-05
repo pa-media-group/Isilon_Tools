@@ -54,14 +54,19 @@ class Platform(object):
                             r = self.api_call("GET", self.platform_url + "/protocols/nfs/exports?zone="+zone[1])
                         else:
                             r = self.api_call("GET", self.platform_url + "/protocols/nfs/exports?zone="+zone[1]+"&resume="+resume)
+                data = r.json()
             elif type == 'quotas':
                 if resume == None:
                     r = self.api_call("GET", self.platform_url + "/quota/quotas/")
                 else:
                     r = self.api_call("GET", self.platform_url + "/quota/quotas?resume="+resume)
+                data = r.json()
+                for quota in data['quotas']:
+                    if quota['notifications'] == 'custom':
+                      r2 = self.api_call("GET", self.platform_url + "/quota/quotas/"+quota['id']+"/notifications")
+                      quota['notifications_data'] = r2.json()['notifications']
             else:
                 self.log.exception("illegal type!")
-            data = r.json()
             for obj in data[type]:
                 if type == 'exports':
                     obj['zid'] = zone[0]
@@ -126,6 +131,9 @@ class Platform(object):
             del obj['thresholds']['advisory_last_exceeded']
             del obj['thresholds']['advisory_exceeded']
             del obj['notifications']
+            # We also ignore notifications_data, for now
+            if 'notifications_data' in obj:
+                del obj['notifications_data']
             params = json.dumps(obj)
             r = self.api_call("POST", self.platform_url + "/quota/quotas/", data=params)
         return

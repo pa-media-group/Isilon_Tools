@@ -70,6 +70,19 @@ class Platform(object):
                     r = self.api_call("GET", self.platform_url + "/snapshot/schedules/")
                 else:
                     r = self.api_call("GET", self.platform_url + "/snapshot/schedules?resume="+resume)
+                data = r.json()
+            elif type == 'policies':
+                if resume == None:
+                    r = self.api_call("GET", self.platform_url + "/sync/policies/")
+                else:
+                    r = self.api_call("GET", self.platform_url + "/sync/policies?resume="+resume)
+                data = r.json()
+            elif type == 'pools':
+                if resume == None:
+                    r = self.api_call("GET", self.platform_url + "/network/pools")
+                else:
+                    r = self.api_call("GET", self.platform_url + "/network/pools?resume="+resume)
+                data = r.json()
             else:
                 self.log.exception("illegal type!")
             for obj in data[type]:
@@ -85,7 +98,11 @@ class Platform(object):
                     self.log.log(logging.INFO,"Backing up quota on path %s type: %s", obj['path'], obj['type'])
                 if type == 'schedules':
                    self.log.log(logging.INFO,"Backing up snapshot schedule name %s path: %s", obj['name'], obj['path'])
-                count += 1
+                if type == 'policies':
+                   self.log.log(logging.INFO,"Backing sync policy name %s path: %s", obj['name'], obj['source_root_path'])
+                if type == 'pools':
+                   self.log.log(logging.INFO,"Backing Network config %s", obj['name'])
+            count += 1
             resume = data['resume']
             if resume == None:
                 break

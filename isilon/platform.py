@@ -54,7 +54,6 @@ class Platform(object):
                             r = self.api_call("GET", self.platform_url + "/protocols/nfs/exports?zone="+zone[1])
                         else:
                             r = self.api_call("GET", self.platform_url + "/protocols/nfs/exports?zone="+zone[1]+"&resume="+resume)
-                data = r.json()
             elif type == 'quotas':
                 if resume == None:
                     r = self.api_call("GET", self.platform_url + "/quota/quotas/")
